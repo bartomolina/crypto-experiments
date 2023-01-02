@@ -4,9 +4,10 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import ActiveLink from "./active-link";
 
 const navigation = [
+  { name: "Home", href: "/" },
   { name: "Crypto", href: "/crypto" },
   { name: "Ethers.js", href: "/ethersjs" },
-  { name: "wagmi", href: "/" },
+  { name: "wagmi", href: "/wagmi" },
   { name: "Alchemy API", href: "/alchemy" },
 ];
 
