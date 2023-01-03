@@ -3,8 +3,8 @@ import Head from "next/head";
 const Home = () => (
   <>
     <Head>
-      <title>WAGMI - Home</title>
-      <meta name="description" content="WAGMI" />
+      <title>Ethers.js - Crypto experiments</title>
+      <meta name="description" content="Home" />
     </Head>
     <div className="mx-auto max-w-5xl sm:px-6 lg:px-8">
       <div className="px-4 py-8 sm:px-0">

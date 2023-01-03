@@ -6,21 +6,21 @@ type FieldProps = {
   type?: "input" | "details";
 };
 
-const Field = ({ label, text, type = "input" }: PropsWithChildren<FieldProps>) => {
+const Field = ({ label, text, type = "input" }: PropsWithChildren<FieldProps>) => {  
   return type === "details" ? (
     <div>
-      <span className="block text-sm text-gray-700">{label}</span>
-      <span className="mt-1 block text-gray-900">{text}</span>
+      <span className="block text-xs text-gray-700">{label}</span>
+      <span className="block text-lg text-gray-900">{text}</span>
     </div>
   ) : (
     <div>
-      <label htmlFor={label} className="block text-sm text-gray-700">
+      <label htmlFor={label.replaceAll(" ", "")} className="block text-xs text-gray-700">
         {label}
       </label>
       <input
         type="text"
         defaultValue={text}
-        id={label}
+        id={label.replaceAll(" ", "")}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
       />
     </div>

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import Head from "next/head";
-import { Button, Field } from "../components/forms";
+import { Field, Button } from "../components/forms";
 
 import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
@@ -22,8 +22,7 @@ const Wagmi = () => {
 
   const handleConnect = (event: FormEvent) => {
     event.preventDefault();
-    console.log(isConnected ? "Disconnecting" : "Connecting");
-    // console.log("Supported: ", chain?.unsupported);
+    console.log(isConnected ? "Disconnecting..." : "Connecting...");
     isConnected ? disconnect() : connect();
   };
 
@@ -38,8 +37,8 @@ const Wagmi = () => {
   return (
     <>
       <Head>
-        <title>WAGMI - Home</title>
-        <meta name="description" content="WAGMI" />
+        <title>wagmi - Crypto experiments</title>
+        <meta name="description" content="wagmi" />
       </Head>
       <div className="mx-auto max-w-5xl sm:px-6 lg:px-8">
         <div className="px-4 py-8 sm:px-0">
@@ -52,7 +51,7 @@ const Wagmi = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Connect</h3>
               </div>
               <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
-                <div className="space-y-4 p-5">
+                <div className="space-y-6 p-5">
                   <Button text={isConnected ? "Disconnect" : "Connect"} clickAction={handleConnect}></Button>
                   <Field label="IsConnected" text={isConnected.toString()} type="details" />
                   <Field label="Address" text={address ? address : "Not connected"} type="details" />

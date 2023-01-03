@@ -6,7 +6,8 @@ import ActiveLink from "./active-link";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Crypto", href: "/crypto" },
-  { name: "Ethers.js", href: "/ethersjs" },
+  { name: "JSON/RPC", href: "/rpc" },
+  { name: "Ethers.js", href: "/ethers" },
   { name: "wagmi", href: "/wagmi" },
   { name: "Alchemy API", href: "/alchemy" },
 ];
