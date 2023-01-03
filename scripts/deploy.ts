@@ -2,16 +2,16 @@ import { ethers, artifacts } from "hardhat";
 const fs = require("fs");
 
 async function main() {
-  const EscrowFactory = await ethers.getContractFactory("EscrowFactory");
-  const escrowFactory = await EscrowFactory.deploy();
+  const TestContract = await ethers.getContractFactory("TestContract");
+  const testContract = await TestContract.deploy();
 
   await escrowFactory.deployed();
 
-  console.log(`EscrowFactory deployed to ${escrowFactory.address}`);
+  console.log(`TestContract deployed to ${testContract.address}`);
 
   const data = {
-    address: escrowFactory.address,
-    abi: escrowFactory.interface.format("json"),
+    address: testContract.address,
+    abi: testContract.interface.format("json"),
   };
 
   fs.writeFileSync("./app/lib/contract.json", JSON.stringify(data));

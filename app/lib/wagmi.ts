@@ -1,11 +1,11 @@
 import { createClient, configureChains } from "wagmi";
-import { mainnet, hardhat } from "wagmi/chains";
+import { mainnet, goerli, hardhat } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 
-const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet],
-  [publicProvider()]
-);
+import { getDefaultProvider } from "ethers";
+
+const { chains, provider, webSocketProvider } = configureChains([mainnet, hardhat, goerli], [publicProvider()]);
 
 const client = createClient({
   autoConnect: true,

@@ -20,8 +20,8 @@ const Ethers = () => {
     try {
       console.log("Connecting to provider...");
       if (!window.ethereum) return;
-      // const _provider = new Web3Provider(window.ethereum, "any");
-      const _provider = getDefaultProvider("goerli", { alchemy: "" });
+      const _provider = new Web3Provider(window.ethereum, "any");
+      // const _provider = getDefaultProvider("goerli", { alchemy: "" });
       _provider.on("network", (newNetwork, oldNetwork) => {
         if (oldNetwork) {
           window.location.reload();

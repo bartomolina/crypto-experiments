@@ -7,6 +7,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Crypto", href: "/crypto" },
   { name: "JSON/RPC", href: "/rpc" },
+  { name: "EIP-1193", href: "/eip1193" },
   { name: "Ethers.js", href: "/ethers" },
   { name: "wagmi", href: "/wagmi" },
   { name: "Alchemy API", href: "/alchemy" },
