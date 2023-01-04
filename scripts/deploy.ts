@@ -5,7 +5,7 @@ async function main() {
   const TestContract = await ethers.getContractFactory("TestContract");
   const testContract = await TestContract.deploy();
 
-  await escrowFactory.deployed();
+  await testContract.deployed();
 
   console.log(`TestContract deployed to ${testContract.address}`);
 

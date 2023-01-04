@@ -1,0 +1,10 @@
+- **Chain:** (wagmi/chains). mainnet, polygonMumbai, hardhat, localhost ...
+- **Provider:**
+  - wagmi (wagmi/provides/[provider]). Ether connectors that include chain info:
+    - alchemyProvider, infuraProvider, jsonRpcProvider
+    - publicProvider(ethers StaticJsonRpcProvider): Currently pointing to Cloudflare.
+  - Ethers.js:
+    - Web3Provider, EtherscanProvider ...
+    - getDefaultProvider() (ethers FallbackProvider).
+- **Client:** (createClient) wagmi Provider + optional Connector. Sets auto-connect. Passed to WagmiConfig.
+- **Connector:** InjectedConnector, CoinbaseWalletConnector …
