@@ -3,6 +3,7 @@
   - wagmi (wagmi/provides/[provider]). Ether connectors that include chain info:
     - alchemyProvider, infuraProvider, jsonRpcProvider
     - publicProvider(ethers StaticJsonRpcProvider): Currently pointing to Cloudflare.
+    - configureChains(): Configure chains with providers. wraps the providers into an ethers FallbackProvider.
   - Ethers.js:
     - Web3Provider, EtherscanProvider ...
     - getDefaultProvider() (ethers FallbackProvider).

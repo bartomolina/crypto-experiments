@@ -2,30 +2,34 @@ import { FormEvent, useEffect, useState } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import { Field, Button } from "../components/forms";
+import { LinkIcon } from "@heroicons/react/24/solid";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-import { useAccount, useProvider, useConnect, useDisconnect, useNetwork } from "wagmi";
+import { useProvider, useConnect, useDisconnect, useAccount, useNetwork, useBalance } from "wagmi";
+import { Provider } from "@wagmi/core";
 import { InjectedConnector } from "wagmi/connectors/injected";
 
+type LatestBlocksParams = {
+  provider: Provider;
+};
+const fetchLatestBlock = ({ provider }: LatestBlocksParams) => provider.getBlockNumber();
+
 const Wagmi = () => {
-  const { data: topic } = useSWR("/api/markdown/wagmi", fetcher);
   const [hasMounted, setHasMounted] = useState(false);
+  const { data: topic } = useSWR("/api/markdown/wagmi", fetcher);
+
   const provider = useProvider();
-  const { address, connector, isConnected } = useAccount();
-  const { chains, chain } = useNetwork();
-  const { connect, connectors, error, isLoading, pendingConnector } = useConnect({
+  const { data: latestBlock } = useSWR({ key: "latestBlock", provider }, fetchLatestBlock);
+  console.log("Latest block: ", latestBlock);
+
+  const { connect, isLoading } = useConnect({
     connector: new InjectedConnector(),
   });
   const { disconnect } = useDisconnect();
-
-  // To prevent hydration errors:
-  // https://codingwithmanny.medium.com/understanding-hydration-errors-in-nextjs-13-with-a-web3-wallet-connection-8155c340fbd5
-  // https://www.joshwcomeau.com/react/the-perils-of-rehydration/#the-solution
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-  if (!hasMounted) return null;
+  const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const { data } = useBalance();
 
   const handleConnect = (event: FormEvent) => {
     event.preventDefault();
@@ -35,19 +39,20 @@ const Wagmi = () => {
   // Logs
   // console.log(topic);
   // console.log("isConnected: ", isConnected);
-  // console.log("Provider: ", provider);
-  // console.log("Connector: ", connector);
-  // console.log("Chains:", chains);
   // console.log("Chain:", chain);
   // console.log("Address: ", address);
-  // console.log("Error: ", error);
   // console.log("isLoading: ", isLoading);
-  // console.log("Connectors: ", connectors);
-  // console.log("pendingConnector: ", pendingConnector);
-  // if (provider) {
-  //   provider.getBlockNumber().then(console.log);
-  // }
   // End Logs
+
+  // To prevent hydration errors:
+  // https://codingwithmanny.medium.com/understanding-hydration-errors-in-nextjs-13-with-a-web3-wallet-connection-8155c340fbd5
+  // https://www.joshwcomeau.com/react/the-perils-of-rehydration/#the-solution
+  useEffect(() => {
+    if (!hasMounted) {
+      setHasMounted(true);
+    }
+  }, []);
+  if (!hasMounted) return null;
 
   return (
     <>
@@ -58,26 +63,52 @@ const Wagmi = () => {
       <div className="mx-auto max-w-5xl sm:px-6 lg:px-8">
         <div className="px-4 py-8 sm:px-0">
           <header>
-            <h1 className="text-3xl font-semibold space-y-3">wagmi</h1>
+            <h1 className="text-3xl font-semibold space-y-3">
+              wagmi
+              <a href="https://wagmi.sh/" target="_blank" rel="noopener noreferrer">
+                <LinkIcon className="h-5 w-5 ml-2 inline" />
+              </a>
+            </h1>
           </header>
           <main className="pt-8">
             <div className="markdown">
               <div className="text-sm text-gray-90" dangerouslySetInnerHTML={{ __html: topic?.html }} />
             </div>
-            <div className="bg-white mt-8 p-8 shadow rounded-lg md:grid md:grid-cols-4 md:gap-6">
-              <div className="md:col-span-1">
-                <h3 className="text-lg font-semibold text-gray-900">Connect</h3>
+            <div className="bg-white mt-8 p-8 shadow rounded-lg">
+              <div className="md:grid md:grid-cols-4 md:gap-6">
+                <div className="md:col-span-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Provider</h3>
+                </div>
+                <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
+                  <div className="space-y-6 p-5">
+                    <Field
+                      label="Latest Block"
+                      text={typeof latestBlock !== "undefined" ? latestBlock.toString() : "N/A"}
+                      type="details"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
-                <div className="space-y-6 p-5">
-                  <Button
-                    disabled={isLoading}
-                    text={isLoading ? "Connecting..." : isConnected ? "Disconnect" : "Connect"}
-                    clickAction={handleConnect}
-                  ></Button>
-                  <Field label="IsConnected" text={isConnected.toString()} type="details" />
-                  <Field label="Address" text={address ? address : "Not connected"} type="details" />
-                  <Field label="Network" text={chain ? chain.name : "Not connected"} type="details" />
+              <div className="hidden sm:block">
+                <div className="py-5">
+                  <div className="border-t border-gray-200"></div>
+                </div>
+              </div>
+              <div className="md:grid md:grid-cols-4 md:gap-6">
+                <div className="md:col-span-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Connect</h3>
+                </div>
+                <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
+                  <div className="space-y-6 p-5">
+                    <Button
+                      disabled={isLoading}
+                      text={isLoading ? "Connecting..." : isConnected ? "Disconnect" : "Connect"}
+                      clickAction={handleConnect}
+                    ></Button>
+                    <Field label="IsConnected" text={isConnected.toString()} type="details" />
+                    <Field label="Address" text={address ? address : "N/A"} type="details" />
+                    <Field label="Network" text={chain ? chain.name : "N/A"} type="details" />
+                  </div>
                 </div>
               </div>
             </div>

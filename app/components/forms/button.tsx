@@ -11,7 +11,11 @@ const Button = ({ text, clickAction, disabled = false }: PropsWithChildren<Butto
     type="submit"
     onClick={clickAction}
     disabled={disabled}
-    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 p-1 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+    className={
+      disabled
+        ? "inline-flex justify-center rounded-md border border-transparent bg-indigo-200 p-1 text-sm text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:ring-offset-2"
+        : "inline-flex justify-center rounded-md border border-transparent bg-indigo-600 p-1 text-sm text-white shadow-sm hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:ring-offset-2"
+    }
   >
     {text}
   </button>
