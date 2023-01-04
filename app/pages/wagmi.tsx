@@ -6,7 +6,7 @@ import { LinkIcon } from "@heroicons/react/24/solid";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-import { useProvider, useConnect, useDisconnect, useAccount, useNetwork, useBalance } from "wagmi";
+import { useProvider, useConnect, useDisconnect, useAccount, useNetwork, useBalance, useBlockNumber } from "wagmi";
 import { Provider } from "@wagmi/core";
 import { InjectedConnector } from "wagmi/connectors/injected";
 
@@ -21,7 +21,6 @@ const Wagmi = () => {
 
   const provider = useProvider();
   const { data: latestBlock } = useSWR({ key: "latestBlock", provider }, fetchLatestBlock);
-  console.log("Latest block: ", latestBlock);
 
   const { connect, isLoading } = useConnect({
     connector: new InjectedConnector(),
@@ -29,7 +28,7 @@ const Wagmi = () => {
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
-  const { data } = useBalance();
+  const { data: balance } = useBalance({ address });
 
   const handleConnect = (event: FormEvent) => {
     event.preventDefault();
@@ -38,10 +37,12 @@ const Wagmi = () => {
 
   // Logs
   // console.log(topic);
-  // console.log("isConnected: ", isConnected);
-  // console.log("Chain:", chain);
-  // console.log("Address: ", address);
+  // console.log(provider);
   // console.log("isLoading: ", isLoading);
+  // console.log("isConnected: ", isConnected);
+  // console.log("Address: ", address);
+  // console.log("Balance: ", balance);
+  // console.log("Chain:", chain);
   // End Logs
 
   // To prevent hydration errors:
@@ -107,6 +108,7 @@ const Wagmi = () => {
                     ></Button>
                     <Field label="IsConnected" text={isConnected.toString()} type="details" />
                     <Field label="Address" text={address ? address : "N/A"} type="details" />
+                    <Field label="Balance" text={balance ? `${balance.formatted} ${balance.symbol}` : "N/A"} type="details" />
                     <Field label="Network" text={chain ? chain.name : "N/A"} type="details" />
                   </div>
                 </div>
