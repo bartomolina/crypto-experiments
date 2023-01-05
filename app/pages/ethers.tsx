@@ -57,9 +57,9 @@ const Ethers = () => {
         }
       );
     }
-    if (provider && "getSigner" in provider) {
-      setSigner(provider?.getSigner());
-    }
+    // if (provider && "getSigner" in provider) {
+    //   setSigner(provider?.getSigner());
+    // }
   }, [provider]);
 
   const handleGetAddress = (event: FormEvent) => {

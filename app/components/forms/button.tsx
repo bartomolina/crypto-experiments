@@ -2,14 +2,15 @@ import React, { MouseEventHandler, PropsWithChildren } from "react";
 
 type ButtonProps = {
   text: string;
-  clickAction: MouseEventHandler;
+  type?: "button" | "submit" | "reset";
+  clickAction?: MouseEventHandler;
   disabled?: boolean;
 };
 
-const Button = ({ text, clickAction, disabled = false }: PropsWithChildren<ButtonProps>) => (
+const Button = ({ text, type = "button", clickAction, disabled = false }: PropsWithChildren<ButtonProps>) => (
   <button
-    type="submit"
-    onClick={clickAction}
+    type={type}
+    {...(clickAction && { onClick: clickAction })}
     disabled={disabled}
     className={
       disabled

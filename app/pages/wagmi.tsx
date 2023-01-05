@@ -6,9 +6,13 @@ import { LinkIcon } from "@heroicons/react/24/solid";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-import { useProvider, useConnect, useDisconnect, useAccount, useNetwork, useBalance, useBlockNumber } from "wagmi";
+import contract from "../lib/contract.json";
+import { useProvider, useConnect, useDisconnect, useAccount, useNetwork, useBalance, useContractRead } from "wagmi";
 import { Provider } from "@wagmi/core";
 import { InjectedConnector } from "wagmi/connectors/injected";
+
+const readContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const readContractFunction = "readMessage";
 
 type LatestBlocksParams = {
   provider: Provider;
@@ -27,8 +31,34 @@ const Wagmi = () => {
   });
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
   const { data: balance } = useBalance({ address });
+  const { chain } = useNetwork();
+  const {
+    data: readContractData,
+    refetch,
+    isRefetching,
+  } = useContractRead({
+    address: readContractAddress,
+    abi: [
+      {
+        inputs: [],
+        name: "readMessage",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+    ] as const,
+    functionName: readContractFunction,
+    onSettled(data, error) {
+      console.log("Settled", { data, error });
+    },
+  });
 
   const handleConnect = (event: FormEvent) => {
     event.preventDefault();
@@ -52,7 +82,7 @@ const Wagmi = () => {
     if (!hasMounted) {
       setHasMounted(true);
     }
-  }, []);
+  }, [hasMounted]);
   if (!hasMounted) return null;
 
   return (
@@ -79,9 +109,13 @@ const Wagmi = () => {
               <div className="md:grid md:grid-cols-4 md:gap-6">
                 <div className="md:col-span-1">
                   <h3 className="text-lg font-semibold text-gray-900">Provider</h3>
+                  <div className="text-xs text-gray-400">
+                    <p>useProvider getBlockNumber /</p>
+                    <p>useBlockNumber</p>
+                  </div>
                 </div>
                 <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
-                  <div className="space-y-6 p-5">
+                  <div className="space-y-3 px-5 py-4">
                     <Field
                       label="Latest Block"
                       text={typeof latestBlock !== "undefined" ? latestBlock.toString() : "N/A"}
@@ -98,9 +132,15 @@ const Wagmi = () => {
               <div className="md:grid md:grid-cols-4 md:gap-6">
                 <div className="md:col-span-1">
                   <h3 className="text-lg font-semibold text-gray-900">Connect</h3>
+                  <div className="text-xs text-gray-400">
+                    <p>useConnect</p>
+                    <p>useAccount</p>
+                    <p>useBalance</p>
+                    <p>useNetwork</p>
+                  </div>
                 </div>
                 <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
-                  <div className="space-y-6 p-5">
+                  <div className="space-y-3 px-5 py-4">
                     <Button
                       disabled={isLoading}
                       text={isLoading ? "Connecting..." : isConnected ? "Disconnect" : "Connect"}
@@ -108,8 +148,36 @@ const Wagmi = () => {
                     ></Button>
                     <Field label="IsConnected" text={isConnected.toString()} type="details" />
                     <Field label="Address" text={address ? address : "N/A"} type="details" />
-                    <Field label="Balance" text={balance ? `${balance.formatted} ${balance.symbol}` : "N/A"} type="details" />
+                    <Field
+                      label="Balance"
+                      text={balance ? `${balance.formatted} ${balance.symbol}` : "N/A"}
+                      type="details"
+                    />
                     <Field label="Network" text={chain ? chain.name : "N/A"} type="details" />
+                  </div>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <div className="py-5">
+                  <div className="border-t border-gray-200"></div>
+                </div>
+              </div>
+              <div className="md:grid md:grid-cols-4 md:gap-6">
+                <div className="md:col-span-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Contract read</h3>
+                  <div className="text-xs text-gray-400">
+                    <p>useContractRead</p>
+                  </div>
+                </div>
+                <div className="shadow bg-gray-100 md:col-span-3 sm:overflow-hidden sm:rounded-md">
+                  <div className="px-5 py-4 space-y-3">
+                    <Field label="Contract address" text={readContractAddress} type="details" />
+                    <Field label="Contract function" text={readContractFunction} type="details" />
+                    <Field
+                      label="Result"
+                      text={readContractData ? readContractData.toString() : "N/A"}
+                      type="details"
+                    />
                   </div>
                 </div>
               </div>
