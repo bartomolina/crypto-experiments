@@ -24,7 +24,7 @@ const Nav = () => {
             <div className="flex h-9 justify-between">
               <div className="flex">
                 {/* Menu items */}
-                <div className="hidden sm:flex sm:space-x-12">
+                <div className="hidden sm:flex sm:space-x-8">
                   {navigation.map((item) => (
                     <ActiveLink
                       key={item.href}

@@ -16,13 +16,13 @@ const Field = ({ type = "input", label, text, id, changeAction }: PropsWithChild
     </div>
   ) : (
     <div>
-      <label htmlFor={label.replaceAll(" ", "")} className="block text-xs text-gray-400">
+      <label htmlFor={label.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "")} className="block text-xs text-gray-400">
         {label}
       </label>
       <input
         type="text"
         defaultValue={text}
-        id={id ? id : label.replaceAll(" ", "")}
+        id={id ? id : label.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "")}
         onChange={changeAction}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
       />

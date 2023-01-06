@@ -9,7 +9,6 @@ const { chains, provider, webSocketProvider } = configureChains(
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API }),
     publicProvider(),
   ],
-  { targetQuorum: 2, minQuorum: 2 }
 );
 
 const client = createClient({

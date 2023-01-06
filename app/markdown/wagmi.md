@@ -1,3 +1,4 @@
+- React hooks and VanillaJS (@wagmi/core).
 - **Chain:** (wagmi/chains). mainnet, polygonMumbai, hardhat, localhost ...
 - **Provider:**
   - wagmi (wagmi/provides/[provider]). Ether connectors that include chain info:

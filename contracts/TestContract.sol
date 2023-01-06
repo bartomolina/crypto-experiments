@@ -10,6 +10,7 @@ pragma solidity 0.8.17;
 
 contract TestContract {
     string public message = "Hello world!";
+    string public message2 = "gm!";
 
     event MessageSet(string _message);
 
@@ -23,5 +24,9 @@ contract TestContract {
 
     function readMessage() public view returns(string memory) {
         return message;
+    }
+
+    function readMessage2() public view returns(string memory) {
+        return message2;
     }
 }
